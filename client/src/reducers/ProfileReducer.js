@@ -16,6 +16,14 @@ const profiles = (state = defaultState, action) => {
           }
         ]
       };
+    case "DELETE_PROFILE":
+      return {
+        ...state,
+        profileCharts: [
+          ...state.profileCharts.slice(0, action.index),
+          ...state.profileCharts.slice(action.index + 1)
+        ]
+      };
     default:
       return state;
   }

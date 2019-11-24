@@ -99,7 +99,11 @@ class AddChartForm extends Component {
           color="primary"
           className={classes.formButton}
           onClick={this.handleAddChart}
-          disabled={this.state.gasName === "" || this.state.date === ""}
+          disabled={
+            this.state.gasName === "" ||
+            this.state.date === "" ||
+            this.props.charts.length >= 8
+          }
         >
           Generate Chart
         </Button>

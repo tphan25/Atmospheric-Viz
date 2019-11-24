@@ -1,6 +1,14 @@
 import React, { Component, Fragment } from "react";
 import classes from "./ChartArea.module.css";
-import { Card, CardContent, Typography } from "@material-ui/core";
+import {
+  Card,
+  CardContent,
+  Typography,
+  IconButton,
+  Box
+} from "@material-ui/core";
+import { Delete } from "@material-ui/icons";
+import ZoomInIcon from "@material-ui/icons/ZoomIn";
 
 export default class ChartArea extends Component {
   render() {
@@ -18,8 +26,25 @@ export default class ChartArea extends Component {
     return (
       <Card key={index} className={classes.chart}>
         <CardContent>
-          <Typography>{data.gas}</Typography>
-          <Typography>{data.date}</Typography>
+          <Box display="flex">
+            <Box className={classes.plot}>
+              <Typography variant="caption">{data.gas}</Typography>
+              <Typography variant="caption">{data.date}</Typography>
+            </Box>
+            <Box
+              display="flex"
+              flexDirection="column"
+              className={classes.buttonBox}
+            >
+              <IconButton>
+                <ZoomInIcon />
+              </IconButton>
+              <IconButton onClick={this.props.deleteChart.bind(this, index)}>
+                <Delete />
+              </IconButton>
+            </Box>
+          </Box>
+          <div className={classes.cardContent}></div>
         </CardContent>
       </Card>
     );

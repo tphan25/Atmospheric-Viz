@@ -3,8 +3,8 @@ import classes from "./Layout.module.css";
 import ChartArea from "./ChartArea";
 import { connect } from "react-redux";
 import { Typography, Box } from "@material-ui/core";
-import { addProfile } from "../actions/ProfileActions";
-import { addAodVcd } from "../actions/AodVcdActions";
+import { addProfile, deleteProfile } from "../actions/ProfileActions";
+import { addAodVcd, deleteAodVcd } from "../actions/AodVcdActions";
 import AddChartForm from "../Components/AddChartForm";
 
 class Layout extends Component {
@@ -19,11 +19,17 @@ class Layout extends Component {
                 Concentration Profiles
               </Typography>
             </div>
-            <ChartArea charts={this.props.profileCharts} />
+            <ChartArea
+              charts={this.props.profileCharts}
+              deleteChart={this.props.deleteProfile}
+            />
           </div>
           {/* Form for adding in new concentration profiles chart */}
           <div className={classes.form}>
-            <AddChartForm addChart={this.props.addProfile} />
+            <AddChartForm
+              addChart={this.props.addProfile}
+              charts={this.props.profileCharts}
+            />
           </div>
         </Box>
         <Box display="flex" className={classes.aod}>
@@ -34,11 +40,17 @@ class Layout extends Component {
                 AOD/VCD (Aerosol Optical Depth/Vertical Column Density)
               </Typography>
             </div>
-            <ChartArea charts={this.props.aodVcd} />
+            <ChartArea
+              charts={this.props.aodVcd}
+              deleteChart={this.props.deleteAodVcd}
+            />
           </div>
           {/* Form for adding in new AOD/VCd chart */}
           <div className={classes.form}>
-            <AddChartForm addChart={this.props.addAodVcd} />
+            <AddChartForm
+              addChart={this.props.addAodVcd}
+              charts={this.props.aodVcd}
+            />
           </div>
         </Box>
       </div>
@@ -56,8 +68,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addProfile: chart => dispatch(addProfile(chart)),
-    addAodVcd: chart => dispatch(addAodVcd(chart))
+    addAodVcd: chart => dispatch(addAodVcd(chart)),
+    deleteProfile: index => dispatch(deleteProfile(index)),
+    deleteAodVcd: index => dispatch(deleteAodVcd(index))
   };
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);
