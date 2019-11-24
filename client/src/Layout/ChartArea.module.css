@@ -2,4 +2,11 @@
   background-color: #99d492;
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.chart {
+  height: 45%;
+  margin: 1%;
+  width: 22%;
 }
