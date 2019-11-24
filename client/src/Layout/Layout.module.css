@@ -1,0 +1,32 @@
+.pageContainer {
+  background-color: #bfe1b0;
+  width: 100vw;
+  height: 100vh;
+}
+.profiles {
+  width: 100%;
+  height: 45%;
+}
+.aod {
+  width: 100%;
+  height: 45%;
+}
+.chartContainer {
+  padding-top: 5%;
+  margin-top: auto;
+  margin-left: 2%;
+  width: 75%;
+  height: 80%;
+}
+.containerHeader {
+  position: relative;
+  height: 0;
+  top: -10%;
+}
+.form {
+  padding-top: 5%;
+  margin-top: auto;
+  margin-left: 2%;
+  width: 25%;
+  height: 80%;
+}
