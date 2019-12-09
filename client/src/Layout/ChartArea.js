@@ -7,6 +7,7 @@ import {
   IconButton,
   Box
 } from "@material-ui/core";
+import Chart from "../Components/Chart/Chart";
 import { Delete } from "@material-ui/icons";
 import ZoomInIcon from "@material-ui/icons/ZoomIn";
 
@@ -28,8 +29,7 @@ export default class ChartArea extends Component {
         <CardContent>
           <Box display="flex">
             <Box className={classes.plot}>
-              <Typography variant="caption">{data.gas}</Typography>
-              <Typography variant="caption">{data.date}</Typography>
+              <Chart chartId={"chart" + index}></Chart>
             </Box>
             <Box
               display="flex"
