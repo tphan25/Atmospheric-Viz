@@ -8,12 +8,19 @@ import {
   Typography
 } from "@material-ui/core";
 import classes from "./AddChartForm.module.css";
+import { PROFILE, AODVCD } from "../constants";
 
 /*Consider loading in from an external source */
-const gasList = ["O4", "NO2", "HCHO"];
+// const gasList = ["HCHO", "NO2uv", "NO2vis", "O4uv", "O4vis"];
+
 let dates = [];
-for (var i = 0; i < 5; i++) {
-  dates.push(new Date(2019, 10, 24 - i));
+let datesToProfiles = {};
+let datesToAodVcd = {};
+for (var i = 0; i < 16; i++) {
+  //We want to map each of these date objects to a filename (heatmapx.csv)
+  dates.push(new Date(2019, 0, 255 + i));
+  datesToProfiles[dates[i]] = "heatmap" + i + ".csv";
+  datesToAodVcd[dates[i]] = "vcd" + (255 + i) + ".csv";
 }
 
 class AddChartForm extends Component {
@@ -32,9 +39,16 @@ class AddChartForm extends Component {
   };
 
   handleAddChart = () => {
+    let fileName = "";
+    if (this.props.chartType === PROFILE) {
+      fileName = datesToProfiles[this.state.date];
+    } else if (this.props.chartType === AODVCD) {
+      fileName = datesToAodVcd[this.state.date];
+    }
     let chart = {
       gas: this.state.gasName,
-      date: this.state.date
+      date: this.state.date,
+      fileName: fileName
     };
     this.props.addChart(chart);
   };
@@ -77,7 +91,7 @@ class AddChartForm extends Component {
             value={this.state.gasName}
             onChange={this.handleChange}
           >
-            {this.loadGasItems(gasList)}
+            {this.loadGasItems(this.props.gasList)}
           </Select>
         </FormControl>
         <FormControl

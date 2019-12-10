@@ -53,7 +53,7 @@ const addSvg = (id, margin, height, width) => {
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .attr("id", id + "svg");
 };
-export const drawData = (id, data, height, width, scatter, curvyline) => {
+export const drawAodVcdData = (id, data, height, width, scatter, curvyline) => {
   //Set up both x and y scales
   var xScale = d3
     .scaleLinear()
@@ -78,11 +78,9 @@ export const drawData = (id, data, height, width, scatter, curvyline) => {
         .line()
         .curve(d3.curveBundle.beta(1)) // Just add that to have a curve instead of segments
         .x(function(d) {
-          console.log(d);
           return xScale(d.time);
         })
         .y(function(d) {
-          console.log(d);
           return yScale(d.value);
         })
     );
@@ -94,11 +92,9 @@ export const drawData = (id, data, height, width, scatter, curvyline) => {
     .append("circle")
     .attr("class", "myCircle")
     .attr("cx", function(d) {
-      console.log(d);
       return xScale(d.time);
     })
     .attr("cy", function(d) {
-      console.log(d);
       return yScale(d.value);
     })
     .attr("r", 0.5)
@@ -109,10 +105,10 @@ export const drawData = (id, data, height, width, scatter, curvyline) => {
 };
 
 //Read the data in, and append to the given div with corresponding id
-export const drawChart = (id, height, width) => {
+export const drawAodVcdChart = (id, height, width) => {
   // append the svg object to the body of the page
   // set the dimensions and margins of the graph
-  var margin = { top: 5, right: 5, bottom: 5, left: 5 };
+  var margin = { top: 10, right: 5, bottom: 5, left: 5 };
   var svg = addSvg(id, margin, height, width);
 
   //Set up both x and y scales

@@ -6,6 +6,7 @@ import { Typography, Box } from "@material-ui/core";
 import { addProfile, deleteProfile } from "../actions/ProfileActions";
 import { addAodVcd, deleteAodVcd } from "../actions/AodVcdActions";
 import AddChartForm from "../Components/AddChartForm";
+import { AODVCD, PROFILE } from "../constants";
 
 class Layout extends Component {
   render() {
@@ -20,6 +21,7 @@ class Layout extends Component {
               </Typography>
             </div>
             <ChartArea
+              chartType={PROFILE}
               charts={this.props.profileCharts}
               deleteChart={this.props.deleteProfile}
             />
@@ -27,6 +29,8 @@ class Layout extends Component {
           {/* Form for adding in new concentration profiles chart */}
           <div className={classes.form}>
             <AddChartForm
+              chartType={PROFILE}
+              gasList={["HCHO", "NO2uv", "NO2vis", "O4uv", "O4vis"]}
               addChart={this.props.addProfile}
               charts={this.props.profileCharts}
             />
@@ -41,6 +45,7 @@ class Layout extends Component {
               </Typography>
             </div>
             <ChartArea
+              chartType={AODVCD}
               charts={this.props.aodVcd}
               deleteChart={this.props.deleteAodVcd}
             />
@@ -48,6 +53,8 @@ class Layout extends Component {
           {/* Form for adding in new AOD/VCd chart */}
           <div className={classes.form}>
             <AddChartForm
+              chartType={AODVCD}
+              gasList={["HCHO", "NO2uv", "NO2vis"]}
               addChart={this.props.addAodVcd}
               charts={this.props.aodVcd}
             />

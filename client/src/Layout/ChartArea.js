@@ -1,12 +1,6 @@
 import React, { Component, Fragment } from "react";
 import classes from "./ChartArea.module.css";
-import {
-  Card,
-  CardContent,
-  Typography,
-  IconButton,
-  Box
-} from "@material-ui/core";
+import { Card, CardContent, IconButton, Box } from "@material-ui/core";
 import Chart from "../Components/Chart/Chart";
 import { Delete } from "@material-ui/icons";
 import ZoomInIcon from "@material-ui/icons/ZoomIn";
@@ -23,13 +17,17 @@ export default class ChartArea extends Component {
   }
 
   /*Convert this to a d3 chart contained by the card later. */
-  dataToChart = (data, index) => {
+  dataToChart = (chartFile, index) => {
     return (
       <Card key={index} className={classes.chart}>
         <CardContent>
           <Box display="flex">
             <Box className={classes.plot}>
-              <Chart chartId={"chart" + index}></Chart>
+              <Chart
+                chartFile={chartFile}
+                chartType={this.props.chartType}
+                chartId={"chart" + index}
+              ></Chart>
             </Box>
             <Box
               display="flex"
