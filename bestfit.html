@@ -6,6 +6,7 @@
 }
 </style>
 <body>
+	<input type="checkbox" class="checkbox" value="bestfit" checked><label>BEST FIT</label>
 <div id="my_dataviz"></div>
 <script src="https://d3js.org/d3.v4.js"></script>
 <script>
@@ -39,12 +40,77 @@ console.log(data)
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x));
 
+  // text label for the x axis
+    svg.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Time");
+
     // Add Y axis on left
     var y = d3.scaleLinear()
       .domain( [0, 6])
       .range([ height, 0]);
     var yAxis = svg.append("g")
       .call(d3.axisLeft(y));
+
+        // text label for the y axis
+  svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Median");
+
+  svg.append("text")
+      .attr("transform", "rotate(0)")
+      .attr("y", 0 - margin.left+20)
+      .attr("x",0 - (-5))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .append('tspan')
+      .text('16')
+      .style('font-size', '.6rem')
+      .attr('dx', '0.1em')
+      .attr('dy', '1.5rem');
+
+  svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-anchor", "underline")  
+        .text("HCHO - VERTICAL COLUMNS");
+
+  svg.append("text")
+      .attr("transform", "rotate(0)")
+      .attr("y", 0 - margin.left+20)
+      .attr("x",0 - (10))
+      .attr("dy", "2em")
+      .style("text-anchor", "middle")
+      .text("[10 ");
+
+   svg.append("text")
+      .attr("transform", "rotate(0)")
+      .attr("y", 0 - margin.left+20)
+      .attr("x",0 - (-30))
+      .attr("dy", "2em")
+      .style("text-anchor", "middle")
+      .text(" cm ]");
+
+   svg.append("text")
+      .attr("transform", "rotate(0)")
+      .attr("y", 0 - margin.left+20)
+      .attr("x",0 - (-15))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .append('tspan')
+      .text('-2')
+      .style('font-size', '.6rem')
+      .attr('dx', '2.2em')
+      .attr('dy', '1.5rem');
 
      // Add Y axis on right
     var y1 = d3.scaleLinear()
@@ -115,6 +181,11 @@ function make_y_gridlines() {
         .y(function(d) { return y(d.value) })
         )
 
+	d3.select("#nValue").on("input", function() {
+  	update(+this.value);
+	});
+
+
     // create a tooltip
     var Tooltip = d3.select("#my_dataviz")
       .append("div")
@@ -164,7 +235,7 @@ function make_y_gridlines() {
   var zoom = d3.zoom()
       .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
       .extent([[0, 0], [width, height]])
-      .on("zoom", updateChart);
+      .on("zoom", updateChart)
 
   // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
   svg.append("rect")
@@ -174,9 +245,11 @@ function make_y_gridlines() {
       .style("pointer-events", "all")
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
       .call(zoom);
+
   // now the user can zoom and it will trigger the function called updateChart
 
-  
+
+
   // A function that updates the chart when the user zoom and thus new boundaries are available
   function updateChart() {
 
@@ -210,6 +283,27 @@ function make_y_gridlines() {
         .y(function(d) { return newY(d.value) })
         )
   }
+  function update() {
+  	// For each check box:
+      d3.selectAll(".checkbox").each(function(d){
+        cb = d3.select(this);
+        grp = cb.property("value")
+
+        // If the box is check, I show the group
+        if(cb.property("checked")){
+          svg.selectAll(".line").transition().duration(1000).style("opacity", 0.7).attr("r", function(d){ return size(d.size) })
+
+        // Otherwise I hide it
+        }else{
+          svg.selectAll(".line").transition().duration(1000).style("opacity", 0).attr("r", 0)
+        }
+      })
+  
+    
+  }
+  d3.selectAll(".checkbox").on("change",update);
+    // And I initialize it at the beginning
+    update()
 })
 
 
