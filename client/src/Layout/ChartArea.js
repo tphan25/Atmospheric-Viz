@@ -26,7 +26,7 @@ export default class ChartArea extends Component {
               <Chart
                 chartFile={chartFile}
                 chartType={this.props.chartType}
-                chartId={"chart" + index}
+                chartId={this.props.chartType + "chart" + index}
               ></Chart>
             </Box>
             <Box
