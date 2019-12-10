@@ -48,7 +48,8 @@ class AddChartForm extends Component {
     let chart = {
       gas: this.state.gasName,
       date: this.state.date,
-      fileName: fileName
+      fileName: fileName,
+      chartType: this.props.chartType
     };
     this.props.addChart(chart);
   };

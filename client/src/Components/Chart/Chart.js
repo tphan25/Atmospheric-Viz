@@ -6,12 +6,13 @@ import {
   getProfileColorScale,
   getProfileXScale,
   getProfileYScale,
-  drawProfileData
+  drawProfileData,
+  drawDetailedProfileData,
+  drawDetailedProfileChart
 } from "../../ProfileGraph";
 import * as d3 from "d3";
 import { AODVCD, PROFILE } from "../../constants";
-const WIDTH = 120;
-const HEIGHT = 80;
+
 class Chart extends Component {
   constructor(props) {
     super(props);
@@ -27,11 +28,15 @@ class Chart extends Component {
   }
   componentDidMount() {
     let chartFile = this.props.chartFile;
-    let chartType = this.props.chartType;
+    let chartType = this.props.chartFile.chartType;
     let fileName = "";
     if (chartType === PROFILE) {
       fileName = "heatmap_files/" + chartFile.gas + "/" + chartFile.fileName;
-      this.drawProfileGraph(fileName);
+      if (this.props.detailed) {
+        this.drawDetailedProfileGraph(fileName);
+      } else {
+        this.drawProfileGraph(fileName);
+      }
     } else if (chartType === AODVCD) {
       fileName = "VCD_data/" + chartFile.gas + "/" + chartFile.fileName;
       this.drawAodVcdGraph(fileName);
@@ -46,6 +51,43 @@ class Chart extends Component {
       .style("font-size", "10px")
       .text(title);
   }
+
+  //This is what will go in our modal
+  drawDetailedProfileGraph(fileName) {
+    let id = "#" + this.props.chartId;
+    let dataArr = [];
+    d3.csv(fileName, function(data) {
+      dataArr.push(data);
+    })
+      .then(() => {
+        let dataConverted = convertProfileData(dataArr);
+        let xScale = getProfileXScale(dataConverted, this.props.width);
+        let yScale = getProfileYScale(dataConverted, this.props.height);
+        let colorScale = getProfileColorScale();
+        let svg = drawDetailedProfileChart(
+          id,
+          yScale,
+          xScale,
+          this.props.height,
+          this.props.width
+        );
+        drawDetailedProfileData(
+          "#bigchart",
+          svg,
+          dataArr,
+          yScale,
+          xScale,
+          colorScale
+        );
+        this.drawTitle(
+          svg,
+          this.props.chartFile.gas + ", " + this.state.abbrevDate
+        );
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
   //"heatmap_files/NO2vis/heatmap3.csv"
   drawProfileGraph(fileName) {
     let id = "#" + this.props.chartId;
@@ -55,10 +97,16 @@ class Chart extends Component {
     })
       .then(() => {
         let dataConverted = convertProfileData(dataArr);
-        let xScale = getProfileXScale(dataConverted, WIDTH);
-        let yScale = getProfileYScale(dataConverted, HEIGHT);
+        let xScale = getProfileXScale(dataConverted, this.props.width);
+        let yScale = getProfileYScale(dataConverted, this.props.height);
         let colorScale = getProfileColorScale();
-        let svg = drawProfileChart(id, yScale, xScale, HEIGHT, WIDTH);
+        let svg = drawProfileChart(
+          id,
+          yScale,
+          xScale,
+          this.props.height,
+          this.props.width
+        );
         drawProfileData(svg, dataArr, yScale, xScale, colorScale);
         this.drawTitle(
           svg,
@@ -77,19 +125,30 @@ class Chart extends Component {
       dataArr.push(data);
     })
       .then(() => {
-        let svg = drawAodVcdChart(id, HEIGHT, WIDTH);
+        let svg = drawAodVcdChart(
+          id,
+          dataArr,
+          this.props.height,
+          this.props.width
+        );
         //Need to create scatter & currvyline here because selecting by id for a <g> element doesn't work in d3
         // Create the scatter variable: where both the circles and the brush take place
         let scatter = svg
           .append("g")
-          .attr("clip-path", "url(#clip)")
+          .attr("clip-path", "url(#detailedclip)")
           .attr("id", id + "scatter");
         //This draws actual line of best fit
         let curvyline = svg
           .append("g")
-          .attr("clip-path", "url(#clip)")
+          .attr("clip-path", "url(#detailedclip)")
           .attr("id", id + "curvyline");
-        drawAodVcdData(id, dataArr, HEIGHT, WIDTH, scatter, curvyline);
+        drawAodVcdData(
+          dataArr,
+          this.props.height,
+          this.props.width,
+          scatter,
+          curvyline
+        );
         this.drawTitle(
           svg,
           this.props.chartFile.gas + ", " + this.state.abbrevDate

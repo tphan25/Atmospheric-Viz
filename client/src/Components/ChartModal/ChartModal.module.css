@@ -1,0 +1,11 @@
+.paper {
+  width: 100vw;
+  height: 90vw;
+}
+.box {
+  text-align: center;
+}
+#bigchart {
+  margin: 0 auto;
+  background-color: red;
+}

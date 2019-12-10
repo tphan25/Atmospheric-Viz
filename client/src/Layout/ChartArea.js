@@ -24,8 +24,9 @@ export default class ChartArea extends Component {
           <Box display="flex">
             <Box className={classes.plot}>
               <Chart
+                width={120}
+                height={70}
                 chartFile={chartFile}
-                chartType={this.props.chartType}
                 chartId={this.props.chartType + "chart" + index}
               ></Chart>
             </Box>
@@ -34,7 +35,12 @@ export default class ChartArea extends Component {
               flexDirection="column"
               className={classes.buttonBox}
             >
-              <IconButton>
+              <IconButton
+                onClick={() => {
+                  console.log("yeet");
+                  this.props.openModal(chartFile);
+                }}
+              >
                 <ZoomInIcon />
               </IconButton>
               <IconButton onClick={this.props.deleteChart.bind(this, index)}>

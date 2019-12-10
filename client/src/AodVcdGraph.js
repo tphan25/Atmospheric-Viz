@@ -4,12 +4,44 @@ const addAxes = (svg, height, width, xScale, yScale) => {
   svg
     .append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(xScale));
-  svg.append("g").call(d3.axisLeft(yScale));
+    .call(
+      d3
+        .axisBottom(xScale)
+        .tickSize(3)
+        .tickFormat((domain, value) => "")
+    );
+  svg.append("g").call(
+    d3
+      .axisLeft(yScale)
+      .tickSize(1)
+      .tickFormat((domain, value) => "")
+  );
   svg
     .append("g")
-    .attr("transform", `translate(${width - 10},0)`)
-    .call(d3.axisRight(yScale));
+    .attr("transform", `translate(${width},0)`)
+    .call(
+      d3
+        .axisRight(yScale)
+        .tickSize(1)
+        .tickFormat((domain, value) => "")
+    );
+
+  // text label for the x axis
+  svg
+    .append("text")
+    .attr("transform", "translate(" + width / 2 + " ," + (height + 8) + ")")
+    .style("text-anchor", "middle")
+    .text("Time")
+    .style("font-size", "8px");
+  // text label for the y axis
+  svg
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0)
+    .attr("x", -height / 2)
+    .style("text-anchor", "middle")
+    .text("Median")
+    .style("font-size", "8px");
 };
 
 const addGridLines = (svg, height, width, xScale, yScale) => {
@@ -53,16 +85,36 @@ const addSvg = (id, margin, height, width) => {
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .attr("id", id + "svg");
 };
-export const drawAodVcdData = (id, data, height, width, scatter, curvyline) => {
-  //Set up both x and y scales
-  var xScale = d3
+const getAodVcdXScale = (data, width) => {
+  console.log(data);
+  let min = data[0].time;
+  let max = data[0].time;
+  data.forEach(element => {
+    min = Math.min(element.time, min);
+    max = Math.max(element.time, max);
+  });
+  return d3
     .scaleLinear()
-    .domain([5.5, 16.5])
+    .domain([min, max])
     .range([0, width]);
-  var yScale = d3
+};
+const getAodVcdYScale = (data, height) => {
+  let min = data[0].value;
+  let max = data[0].value;
+  data.forEach(element => {
+    min = Math.min(element.value, min);
+    max = Math.max(element.value, max);
+  });
+  return d3
     .scaleLinear()
-    .domain([0, 6])
+    .domain([min, max])
     .range([height, 0]);
+};
+
+export const drawAodVcdData = (data, height, width, scatter, curvyline) => {
+  //Set up both x and y scales
+  var xScale = getAodVcdXScale(data, width);
+  var yScale = getAodVcdYScale(data, height);
 
   curvyline
     .append("path")
@@ -105,21 +157,15 @@ export const drawAodVcdData = (id, data, height, width, scatter, curvyline) => {
 };
 
 //Read the data in, and append to the given div with corresponding id
-export const drawAodVcdChart = (id, height, width) => {
+export const drawAodVcdChart = (id, data, height, width) => {
   // append the svg object to the body of the page
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 5, bottom: 5, left: 5 };
-  var svg = addSvg(id, margin, height, width);
+  var svg = addSvg(id, margin, height + 10, width);
 
   //Set up both x and y scales
-  var xScale = d3
-    .scaleLinear()
-    .domain([5.5, 16.5])
-    .range([0, width]);
-  var yScale = d3
-    .scaleLinear()
-    .domain([0, 6])
-    .range([height, 0]);
+  var xScale = getAodVcdXScale(data, width);
+  var yScale = getAodVcdYScale(data, height);
   // Now I can use this dataset:
   addAxes(svg, height, width, xScale, yScale);
   //addGridLines(svg, height, width, xScale, yScale);

@@ -2,16 +2,24 @@ import React, { Component } from "react";
 import classes from "./Layout.module.css";
 import ChartArea from "./ChartArea";
 import { connect } from "react-redux";
-import { Typography, Box } from "@material-ui/core";
+import { Typography, Box, Button } from "@material-ui/core";
 import { addProfile, deleteProfile } from "../actions/ProfileActions";
 import { addAodVcd, deleteAodVcd } from "../actions/AodVcdActions";
 import AddChartForm from "../Components/AddChartForm";
 import { AODVCD, PROFILE } from "../constants";
+import ChartModal from "../Components/ChartModal/ChartModal";
+import { openModal, closeModal } from "../actions/ModalActions";
 
 class Layout extends Component {
   render() {
     return (
       <div className={classes.pageContainer}>
+        <ChartModal
+          modalOpen={this.props.modalOpen}
+          modalChart={this.props.modalChart}
+          chart={this.props.modalChart}
+          closeModal={this.props.closeModal}
+        />
         <Box display="flex" className={classes.profiles}>
           {/* Area for viewing concentration profiles*/}
           <div className={classes.chartContainer}>
@@ -23,6 +31,7 @@ class Layout extends Component {
             <ChartArea
               chartType={PROFILE}
               charts={this.props.profileCharts}
+              openModal={this.props.openModal}
               deleteChart={this.props.deleteProfile}
             />
           </div>
@@ -47,6 +56,7 @@ class Layout extends Component {
             <ChartArea
               chartType={AODVCD}
               charts={this.props.aodVcd}
+              openModal={this.props.openModal}
               deleteChart={this.props.deleteAodVcd}
             />
           </div>
@@ -68,7 +78,9 @@ class Layout extends Component {
 const mapStateToProps = state => {
   return {
     profileCharts: state.profiles.profileCharts,
-    aodVcd: state.aodVcd.aodVcdCharts
+    aodVcd: state.aodVcd.aodVcdCharts,
+    modalOpen: state.modal.modalOpen,
+    modalChart: state.modal.modalChart
   };
 };
 
@@ -77,7 +89,9 @@ const mapDispatchToProps = dispatch => {
     addProfile: chart => dispatch(addProfile(chart)),
     addAodVcd: chart => dispatch(addAodVcd(chart)),
     deleteProfile: index => dispatch(deleteProfile(index)),
-    deleteAodVcd: index => dispatch(deleteAodVcd(index))
+    deleteAodVcd: index => dispatch(deleteAodVcd(index)),
+    openModal: chart => dispatch(openModal(chart)),
+    closeModal: () => dispatch(closeModal())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);
