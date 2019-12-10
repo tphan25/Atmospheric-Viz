@@ -11,7 +11,7 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <script>
 // set the dimensions and margins of the graph
-var margin = {top: 60, right: 30, bottom: 30, left: 60},
+var margin = {top: 60, right: 30, bottom: 60, left: 60},
     width = 920 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -83,6 +83,13 @@ console.log(data)
         .style("font-size", "16px") 
         .style("text-anchor", "underline")  
         .text("HCHO - VERTICAL COLUMNS");
+
+  svg.append("text")
+        .attr("x", 0 + 414)             
+        .attr("y", 420)
+        .attr("text-anchor", "middle")   
+        .style("text-anchor", "underline")  
+        .text("Time of the day");
 
   svg.append("text")
       .attr("transform", "rotate(0)")
@@ -242,7 +249,7 @@ function make_y_gridlines() {
       .attr("width", width)
       .attr("height", height)
       .style("fill", "none")
-      .style("pointer-events", "all")
+      .style("pointer-events", "all") 
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
       .call(zoom);
 
