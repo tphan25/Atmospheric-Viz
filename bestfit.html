@@ -136,6 +136,21 @@ console.log(data)
       .attr("x", 0)
       .attr("y", 0);
 
+
+  var zoom = d3.zoom()
+      .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
+      .extent([[0, 0], [width, height]])
+      .on("zoom", updateChart)
+
+  // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
+  svg.append("rect")
+      .attr("width", (width + margin.left + margin.right))
+      .attr("height", height)
+      .style("fill", "none")
+      .style("pointer-events", "fill") 
+      .attr('transform', 'translate(' + 0 + ',' + 0 + ')')
+      .call(zoom);
+
   // Create the scatter variable: where both the circles and the brush take place
   var scatter = svg.append('g')
     .attr("clip-path", "url(#clip)")
@@ -149,6 +164,7 @@ function make_y_gridlines() {
     return d3.axisLeft(y)
         .ticks(10)
 }
+
 
 
 
@@ -188,9 +204,6 @@ function make_y_gridlines() {
         .y(function(d) { return y(d.value) })
         )
 
-	d3.select("#nValue").on("input", function() {
-  	update(+this.value);
-	});
 
 
     // create a tooltip
@@ -211,7 +224,7 @@ function make_y_gridlines() {
       }
       var mousemove = function(d) {
         Tooltip
-          .html("Exact value: " + d.value)
+          .html("Exact value: " + d.value + "/cm²")
           .style("left", (d3.mouse(this)[0]+70) + "px")
           .style("top", (d3.mouse(this)[1]) + "px")
       }
@@ -239,19 +252,7 @@ function make_y_gridlines() {
         .on("mouseleave", mouseleave)
 
         // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
-  var zoom = d3.zoom()
-      .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
-      .extent([[0, 0], [width, height]])
-      .on("zoom", updateChart)
 
-  // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
-  svg.append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .style("fill", "none")
-      .style("pointer-events", "all") 
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-      .call(zoom);
 
   // now the user can zoom and it will trigger the function called updateChart
 
