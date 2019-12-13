@@ -37,7 +37,6 @@ export default class ChartArea extends Component {
             >
               <IconButton
                 onClick={() => {
-                  console.log("yeet");
                   this.props.openModal(chartFile);
                 }}
               >

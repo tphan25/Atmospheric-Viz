@@ -69,7 +69,8 @@ class Chart extends Component {
           yScale,
           xScale,
           this.props.height,
-          this.props.width
+          this.props.width,
+          this.props.chartFile.gas + ", " + this.state.abbrevDate
         );
         drawDetailedProfileData(
           "#bigchart",
@@ -79,10 +80,7 @@ class Chart extends Component {
           xScale,
           colorScale
         );
-        this.drawTitle(
-          svg,
-          this.props.chartFile.gas + ", " + this.state.abbrevDate
-        );
+        console.log(this.state.abbrevDate);
       })
       .catch(error => {
         console.log(error);

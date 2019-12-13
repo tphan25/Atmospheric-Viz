@@ -63,7 +63,7 @@ export const drawProfileChart = (id, yScale, xScale, height, width) => {
     .attr("text-anchor", "middle")
     .attr("x", width / 2)
     .attr("y", height + 7)
-    .text("Time of the day")
+    .text("Time of the day (hour, UTC)")
     .style("font-size", "8px");
   svg
     .append("text")
@@ -72,7 +72,7 @@ export const drawProfileChart = (id, yScale, xScale, height, width) => {
     .attr("y", 0)
     .attr("x", -20)
     .attr("transform", "rotate(-90)")
-    .text("Altitude")
+    .text("Altitude (km)")
     .style("font-size", "8px");
 
   return svg;
@@ -98,7 +98,14 @@ export const drawProfileData = (svg, data, yScale, xScale, colorScale) => {
     .style("stroke", "none")
     .style("opacity", 0.8);
 };
-export const drawDetailedProfileChart = (id, yScale, xScale, height, width) => {
+export const drawDetailedProfileChart = (
+  id,
+  yScale,
+  xScale,
+  height,
+  width,
+  title
+) => {
   var margin = { top: 100, right: 100, bottom: 75, left: 100 };
   var svg = addSvg(id, margin, height, width);
 
@@ -118,16 +125,16 @@ export const drawDetailedProfileChart = (id, yScale, xScale, height, width) => {
     .attr("text-anchor", "middle")
     .attr("x", width / 2)
     .attr("y", height + 50)
-    .text("Time of the day");
+    .text("Time of the day (hour, UTC)");
   svg
     .append("text")
     .attr("class", "y label")
     .attr("text-anchor", "middle")
     .attr("y", -50)
-    .attr("x", -50)
+    .attr("x", -height / 2)
     .attr("dy", "-.20em")
     .attr("transform", "rotate(-90)")
-    .text("Altitude");
+    .text("Altitude (km)");
   // Add title to graph
   svg
     .append("text")
@@ -135,8 +142,7 @@ export const drawDetailedProfileChart = (id, yScale, xScale, height, width) => {
     .attr("y", -50)
     .attr("text-anchor", "left")
     .style("font-size", "22px")
-    .text("Heatmap of a Trace Gas");
-  console.log("detaield axies");
+    .text(title);
   return svg;
 };
 export const drawDetailedProfileData = (
@@ -172,8 +178,11 @@ export const drawDetailedProfileData = (
       .html(
         "The profile concentration of this cell is: " +
           d.value +
+          "molecules/cm" +
+          "3".sup() +
           "<br> at time: " +
-          d.daytime
+          d.daytime +
+          "(UTC)"
       )
       .style("left", d3.mouse(this)[0] + 70 + "px")
       .style("top", d3.mouse(this)[1] + "px");

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classes from "./Layout.module.css";
 import ChartArea from "./ChartArea";
 import { connect } from "react-redux";
-import { Typography, Box, Button } from "@material-ui/core";
+import { Typography, Box } from "@material-ui/core";
 import { addProfile, deleteProfile } from "../actions/ProfileActions";
 import { addAodVcd, deleteAodVcd } from "../actions/AodVcdActions";
 import AddChartForm from "../Components/AddChartForm";

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Dialog, DialogTitle, Button, Box } from "@material-ui/core";
+import { Dialog, Button, Box } from "@material-ui/core";
 import classes from "./ChartModal.module.css";
 import Chart from "../Chart/Chart";
-import { PROFILE } from "../../constants";
 
 class ChartModal extends Component {
   handleClose() {
@@ -21,15 +20,22 @@ class ChartModal extends Component {
         }}
       >
         <Button onClick={this.props.closeModal}>CLOSE WINDOW</Button>
-        <Box className={classes.box}>
+        <Box className={classes.box} display="flex" alignItems="center">
           <Chart
             className={classes.chart}
-            width={500}
-            height={300}
+            width={700}
+            height={500}
             chartFile={this.props.modalChart}
             chartId={"bigchart"}
             detailed={true}
-          ></Chart>
+          />
+          <div className={classes.scaleContainer}>
+            <img
+              src={"/colorscale.png"}
+              alt={"Color Scale"}
+              className={classes.scale}
+            />
+          </div>
         </Box>
       </Dialog>
     );

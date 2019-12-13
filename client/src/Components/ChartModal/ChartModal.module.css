@@ -5,6 +5,15 @@
 .box {
   text-align: center;
 }
+.scale {
+  height: 100%;
+  width: 100%;
+}
+.scaleContainer {
+  float: right;
+  height: 250px;
+  width: 250px;
+}
 #bigchart {
   margin: 0 auto;
   background-color: red;
